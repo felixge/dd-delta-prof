@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -31,6 +32,13 @@ func main() {
 }
 
 func run() error {
+	var flagF = flag.Bool("version", false, "Print version and exit")
+	flag.Parse()
+	if *flagF {
+		fmt.Printf("%s\n", version)
+		return nil
+	}
+
 	err := profiler.Start(
 		profiler.WithService(service),
 		profiler.WithEnv("prod"),
