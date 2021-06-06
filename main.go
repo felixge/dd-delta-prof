@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	_ "embed"
 
@@ -48,7 +50,18 @@ func run() error {
 
 	log.Printf("Started %s\n", service)
 
-	fmt.Printf("%s\n", exampleJSON)
+	allocLoop()
 
 	return nil
+}
+
+func allocLoop() {
+	for {
+		start := time.Now()
+		var dst interface{}
+		if err := json.Unmarshal(exampleJSON, &dst); err != nil {
+			panic(err)
+		}
+		time.Sleep(time.Since(start))
+	}
 }
