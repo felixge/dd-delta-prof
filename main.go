@@ -15,6 +15,8 @@ var (
 	//go:embed version.txt
 	rawVersion string
 	version    = strings.TrimSpace(rawVersion)
+	//go:embed example.json
+	exampleJSON []byte
 )
 
 const service = "dd-delta-prof"
@@ -45,6 +47,8 @@ func run() error {
 	defer profiler.Stop()
 
 	log.Printf("Started %s\n", service)
+
+	fmt.Printf("%s\n", exampleJSON)
 
 	return nil
 }
