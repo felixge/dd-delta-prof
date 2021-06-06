@@ -43,5 +43,8 @@ func run() error {
 		log.Fatal(err)
 	}
 	defer profiler.Stop()
+
+	log.Printf("Started %s\n", service)
+
 	return nil
 }
