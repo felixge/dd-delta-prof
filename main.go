@@ -35,6 +35,7 @@ func run() error {
 		profiler.WithService(service),
 		profiler.WithEnv("prod"),
 		profiler.WithVersion(version),
+		profiler.WithAgentlessUpload(),
 		profiler.WithProfileTypes(
 			profiler.CPUProfile,
 			profiler.HeapProfile,
