@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -18,8 +19,6 @@ var (
 	//go:embed version.txt
 	rawVersion string
 	version    = strings.TrimSpace(rawVersion)
-	//go:embed example.json
-	exampleJSON []byte
 )
 
 const service = "dd-delta-prof"
@@ -39,7 +38,12 @@ func run() error {
 		return nil
 	}
 
-	err := profiler.Start(
+	jsonData, err := ioutil.ReadFile(flag.Arg(0))
+	if err != nil {
+		return err
+	}
+
+	err = profiler.Start(
 		profiler.WithService(service),
 		profiler.WithEnv("prod"),
 		profiler.WithVersion(version),
@@ -59,16 +63,16 @@ func run() error {
 
 	log.Printf("Started %s\n", service)
 
-	allocLoop()
+	allocLoop(jsonData)
 
 	return nil
 }
 
-func allocLoop() {
+func allocLoop(jsonData []byte) {
 	for {
 		start := time.Now()
 		var dst interface{}
-		if err := json.Unmarshal(exampleJSON, &dst); err != nil {
+		if err := json.Unmarshal(jsonData, &dst); err != nil {
 			panic(err)
 		}
 		time.Sleep(time.Since(start))
